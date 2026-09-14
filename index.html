@@ -4,130 +4,160 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#06110d">
 <title>VocaSprint V5</title>
 <style>
+:root{
+  --bg:#030807;--panel:#07120f;--panel2:#0a1914;--line:#12372b;
+  --green:#20e879;--green2:#69ffad;--text:#f2fff8;--muted:#91aaa0;
+  --danger:#ff6f78;--shadow:0 18px 55px rgba(0,0,0,.38)
+}
 *{box-sizing:border-box}
-body{margin:0;background:#f4f5f8;color:#202124;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{max-width:780px;margin:auto;padding:16px 14px 45px}
-h1{font-size:29px;margin:4px 0}.sub{color:#666;margin-bottom:14px}
-.tabs{display:flex;gap:7px;overflow-x:auto;position:sticky;top:0;background:#f4f5f8;padding:6px 0 10px;z-index:3}
-.tab{flex:1;min-width:92px;border:0;border-radius:12px;padding:12px 7px;font-size:15px;font-weight:750;background:#ddd;cursor:pointer}
-.tab.active{background:#5759e8;color:#fff}
-.card{background:#fff;border-radius:18px;padding:17px;margin-bottom:13px;box-shadow:0 2px 12px #0000000c}
-.big{font-size:34px;font-weight:800;text-align:center;margin:13px 0}
-.center{text-align:center}
-.small{font-size:14px;color:#666}
-input,textarea,select{width:100%;font:inherit;padding:13px;border:1px solid #c9cbd2;border-radius:12px;margin:6px 0 11px;background:#fff}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 80% -10%,#0d3827 0,#06120e 28%,#030807 70%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 28px;border-bottom:1px solid #123226;background:rgba(3,8,7,.88);backdrop-filter:blur(18px);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#20e879,#087a45);display:grid;place-items:center;box-shadow:0 0 30px rgba(32,232,121,.25);font-size:28px}
+.brand h1{margin:0;font-size:28px;letter-spacing:-.6px} .brand h1 span{color:var(--green)}
+.sub{color:#a4b9b0;font-size:14px;margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.top-pill,.icon-btn{background:#071a14;border:1px solid #164735;color:var(--text);border-radius:15px;padding:11px 14px}
+.icon-btn{width:46px;height:46px;padding:0;font-size:20px}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);max-width:1400px;margin:auto;min-height:calc(100vh - 89px)}
+.sidebar{padding:28px 18px;border-right:1px solid #103126;display:flex;flex-direction:column}
+.nav{display:flex;flex-direction:column;gap:7px}
+.tab{border:1px solid transparent;border-radius:15px;padding:13px 15px;background:transparent;color:#b8c9c2;text-align:left;font-weight:750;font-size:16px}
+.tab:hover{background:#0a1c16;color:#fff}
+.tab.active{background:linear-gradient(90deg,#16b95e,#20e879);color:#03100a;box-shadow:0 8px 25px rgba(32,232,121,.18)}
+.side-sep{height:1px;background:#174033;margin:22px 10px}
+.motto{margin-top:auto;padding:15px 10px;color:#29e97e;font-size:18px;line-height:1.35;font-style:italic}
+.content{padding:30px 30px 50px;min-width:0}
+.content-head{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin-bottom:18px}
+.page-title{font-size:25px;margin:0} .page-note{color:var(--muted);margin:5px 0 0}
+.stats{min-width:240px;background:linear-gradient(145deg,#081b14,#06110d);border:1px solid #174b38;border-radius:18px;padding:14px 16px;box-shadow:var(--shadow)}
+.stats-line{display:flex;justify-content:space-between;font-weight:750;margin-bottom:9px}
+.progressbar{height:10px;background:#163128;border-radius:99px;overflow:hidden}
+.progressbar>div{height:100%;background:linear-gradient(90deg,#16c966,#6affae);border-radius:99px;box-shadow:0 0 16px rgba(32,232,121,.35)}
+.card{background:linear-gradient(145deg,rgba(9,28,22,.96),rgba(4,15,12,.96));border:1px solid #174c39;border-radius:22px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;width:170px;height:170px;right:-90px;top:-80px;border-radius:50%;background:rgba(32,232,121,.08);filter:blur(4px);pointer-events:none}
+.card-head{display:flex;align-items:center;gap:13px;margin-bottom:15px}
+.card-icon{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#67ffac,#10ad59);color:#021109;font-size:22px;box-shadow:0 0 24px rgba(32,232,121,.22)}
+h2{margin:0;font-size:23px} h3{margin:0 0 8px}
+.small{font-size:14px;color:var(--muted)} .center{text-align:center}
+.big{font-size:42px;font-weight:850;text-align:center;margin:22px 0 10px;letter-spacing:-.8px}
+input,textarea,select{width:100%;padding:14px 15px;margin:7px 0 11px;background:#06130f;border:1px solid #285344;border-radius:13px;color:var(--text);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(32,232,121,.1)}
 .answerInput{font-size:21px;text-align:center}
-button{border:0;border-radius:12px;padding:12px 15px;font:inherit;font-weight:750;cursor:pointer}
-.primary{background:#5759e8;color:white}.good{background:#dff5e5}.bad{background:#ffe0e0}
-.secondary{background:#e9eaf0}.danger{background:#f7d7d7}
-.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+textarea{min-height:120px;resize:vertical}
+button{border:0;border-radius:13px;padding:12px 16px;font-weight:800}
+.primary{background:linear-gradient(135deg,#1adf72,#16b75d);color:#021109;box-shadow:0 8px 22px rgba(32,232,121,.16)}
+.secondary{background:#0e241c;color:#dfffee;border:1px solid #214d3e}
+.good{background:#0d3b28;color:#8dffc2} .bad,.danger{background:#431a20;color:#ffb4ba}
+.row{display:flex;gap:9px;flex-wrap:wrap} .row>*{flex:1}
 .hidden{display:none!important}
-.feedback{padding:13px;border-radius:12px;margin:10px 0;font-weight:650}
-.ok{background:#dff5e5}.wrong{background:#ffe0e0}
-.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#ececf3;font-size:12px;margin:2px}
-.word{padding:12px 0;border-bottom:1px solid #eee}
-.progressbar{height:10px;background:#e5e6eb;border-radius:99px;overflow:hidden}.progressbar>div{height:100%;background:#5759e8}
-.grade{font-size:42px;font-weight:850;text-align:center;margin:8px}
-.notice{padding:12px;border-radius:12px;background:#fff4cf;margin-bottom:12px}
-hr{border:0;border-top:1px solid #eee;margin:14px 0}
+.feedback{padding:14px;border-radius:13px;margin:11px 0;font-weight:700}
+.ok{background:#0d3b28;border:1px solid #1e8f5d;color:#a5ffd0}
+.wrong{background:#421a20;border:1px solid #a74651;color:#ffd0d4}
+.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#0e251d;border:1px solid #214b3d;color:#a9c6ba;font-size:12px;margin:3px}
+.word{padding:13px 0;border-bottom:1px solid #17372d}
+.grade{font-size:50px;font-weight:900;text-align:center;margin:10px;color:var(--green)}
+.notice{padding:13px;border-radius:13px;background:#3b3512;color:#ffe994;margin-bottom:13px;border:1px solid #695e1d}
+hr{border:0;border-top:1px solid #17372d;margin:16px 0}
+.hero-graphic{position:absolute;right:24px;bottom:18px;font-size:72px;opacity:.8;filter:drop-shadow(0 0 18px rgba(32,232,121,.25))}
+.learning-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px}
+.mini{background:#06130f;border:1px solid #174332;border-radius:17px;padding:16px}
+.mini strong{display:block;margin-bottom:7px}
+@media(max-width:900px){
+ .layout{grid-template-columns:1fr} .sidebar{border-right:0;border-bottom:1px solid #123226;padding:10px 14px;position:sticky;top:89px;z-index:15;background:rgba(3,8,7,.94);backdrop-filter:blur(18px)}
+ .nav{flex-direction:row;overflow:auto} .tab{min-width:110px;text-align:center;white-space:nowrap} .motto,.side-sep{display:none}
+ .content{padding:18px 14px 40px} .content-head{align-items:stretch;flex-direction:column} .stats{min-width:0}
+ .learning-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){.topbar{padding:14px 14px}.brand h1{font-size:22px}.sub{font-size:12px}.logo{width:44px;height:44px}.top-pill{display:none}.icon-btn{display:none}.card{padding:17px;border-radius:18px}.big{font-size:34px}}
 </style>
 </head>
 <body>
-<main>
-<h1>ðªð¸ VocaSprint</h1>
-<div class="sub">5-Phasen-Lernen mit automatischer Korrektur</div>
+<div class="app">
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">📚</div>
+    <div><h1>Voca<span>Sprint</span></h1><div class="sub">5-Phasen-Lernen mit automatischer Korrektur</div></div>
+  </div>
+  <div class="top-actions"><div class="top-pill">🟢 Lernender</div><button class="icon-btn">☼</button><button class="icon-btn">⚙</button></div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <div class="nav">
+    <button class="tab active" data-page="learn">🎓 &nbsp; Lernen</button>
+    <button class="tab" data-page="import">📖 &nbsp; Vokabeln</button>
+    <button class="tab" data-page="list">☷ &nbsp; Liste</button>
+    <button class="tab" data-page="learned">🎯 &nbsp; Gelernt</button>
+  </div>
+  <div class="side-sep"></div>
+  <div class="nav">
+    <button class="tab" data-page="import">⚙ &nbsp; Einstellungen</button>
+    <button class="tab" data-page="import">☁ &nbsp; Daten sichern</button>
+    <button class="tab" data-page="import">⇩ &nbsp; Import / Export</button>
+  </div>
+  <div class="motto">Kleine Schritte.<br>Große Fortschritte.</div>
+</aside>
 
-<div class="tabs">
-<button class="tab active" data-page="learn">ð§  Lernen</button>
-<button class="tab" data-page="import">â Vokabeln</button>
-<button class="tab" data-page="list">ð Liste</button>
-<button class="tab" data-page="learned">ð Gelernt</button>
-</div>
-
+<main class="content">
 <section id="learn">
-<div class="card center">
-<div class="small" id="learnInfo"></div>
-<div class="big" id="question">Noch keine Vokabeln</div>
-<div id="phaseInfo" class="small"></div>
-<input id="answerInput" class="answerInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Spanische Antwort eingeben">
-<button class="primary" id="checkBtn">Antwort prÃ¼fen</button>
-<div id="feedback" class="feedback hidden"></div>
-<button class="secondary hidden" id="nextBtn">NÃ¤chstes Wort</button>
-</div>
-<div class="card">
-<strong>ð¡ Merkhilfe</strong>
-<div id="tipView" class="small" style="margin-top:7px">â</div>
-</div>
-<div class="card">
-<strong>Dein langfristiger Fortschritt</strong>
-<div class="small" id="overall"></div>
-<div class="progressbar" style="margin-top:8px"><div id="overallBar" style="width:0%"></div></div>
-</div>
+  <div class="content-head"><div><h2 class="page-title">Dein Lernbereich</h2><p class="page-note">Trainiere genau die Wörter, die du als Nächstes brauchst.</p></div><div class="stats"><div class="stats-line"><span>Fortschritt</span><span id="headerProgress">0 / 0</span></div><div class="progressbar"><div id="headerBar" style="width:0%"></div></div></div></div>
+  <div class="learning-grid">
+    <div class="card center">
+      <div class="card-head" style="justify-content:center"><div class="card-icon">🧠</div><div><h2>Bereit für die nächste Runde?</h2><div class="small" id="learnInfo"></div></div></div>
+      <div class="big" id="question">Noch keine Vokabeln</div>
+      <div id="phaseInfo" class="small"></div>
+      <input id="answerInput" class="answerInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Spanische Antwort eingeben">
+      <button class="primary" id="checkBtn">Antwort prüfen</button>
+      <div id="feedback" class="feedback hidden"></div>
+      <button class="secondary hidden" id="nextBtn">Nächstes Wort</button>
+    </div>
+    <div>
+      <div class="mini"><strong>💡 Merkhilfe</strong><div id="tipView" class="small" style="margin-top:7px">–</div></div>
+      <div class="mini" style="margin-top:12px"><strong>🏆 5 Phasen</strong><div class="small">Richtig beantworten → Phase steigt. Falsch → gezielte Wiederholung.</div></div>
+      <div class="mini" style="margin-top:12px"><strong>⏱ Wiederholen</strong><div class="small">Die Abstände werden automatisch größer, wenn du sicherer wirst.</div></div>
+    </div>
+  </div>
+  <div class="card"><h3>Langfristiger Fortschritt</h3><div class="small" id="overall"></div><div class="progressbar" style="margin-top:9px"><div id="overallBar" style="width:0%"></div></div></div>
 </section>
 
 <section id="import" class="hidden">
-<div class="card">
-<h2>Vokabeln hinzufÃ¼gen</h2>
-<p class="small">Eine Zeile pro Wort: <b>spanisch â deutsch</b></p>
-<textarea id="importText" placeholder="hola â hallo&#10;gracias â danke&#10;comer â essen"></textarea>
-<button class="primary" id="addBtn">Vokabeln hinzufÃ¼gen</button>
-<div id="importMsg" class="small"></div>
-</div>
-<div class="card">
-<h2>ð¡ Merkhilfe</h2>
-<select id="tipWord"></select>
-<textarea id="tipText" placeholder="Deine persÃ¶nliche EselsbrÃ¼cke..."></textarea>
-<button class="primary" id="saveTip">Merkhilfe speichern</button>
-</div>
-<div class="card">
-<h2>ð¾ Sicherung</h2>
-<p class="small">Der Lernstand wird lokal auf diesem GerÃ¤t gespeichert. FÃ¼r eine sichere Langzeit-Sicherung kannst du eine Datei exportieren und spÃ¤ter wieder importieren.</p>
-<div class="row">
-<button id="exportBtn">Fortschritt sichern</button>
-<button id="importBackupBtn">Sicherung laden</button>
-<input id="backupFile" type="file" accept=".json,application/json" class="hidden">
-</div>
-</div>
-<div class="card">
-<button id="sample">Beispiel-Vokabeln laden</button>
-<button id="reset" class="danger" style="margin-left:5px">Alles lÃ¶schen</button>
-</div>
+  <div class="content-head"><div><h2 class="page-title">Vokabeln verwalten</h2><p class="page-note">Füge ganze Listen ein und ergänze persönliche Merkhilfen.</p></div></div>
+  <div class="card"><div class="card-head"><div class="card-icon">➕</div><div><h2>Vokabeln hinzufügen</h2><div class="small">Eine Zeile pro Wort – spanisch ↔ deutsch</div></div></div>
+    <textarea id="importText" placeholder="hola – hallo&#10;gracias – danke&#10;comer – essen"></textarea>
+    <button class="primary" id="addBtn">＋ Vokabeln hinzufügen</button><div id="importMsg" class="small"></div><div class="hero-graphic">📚</div>
+  </div>
+  <div class="card"><div class="card-head"><div class="card-icon">💡</div><div><h2>Merkhilfe</h2><div class="small">Deine persönliche Eselsbrücke für schwierige Wörter.</div></div></div>
+    <select id="tipWord"></select><textarea id="tipText" placeholder="Deine persönliche Eselsbrücke..."></textarea><button class="primary" id="saveTip">💾 Merkhilfe speichern</button>
+  </div>
+  <div class="card"><div class="card-head"><div class="card-icon">🛡️</div><div><h2>Sicherung</h2><div class="small">Lernstand bleibt auf diesem Gerät gespeichert.</div></div></div>
+    <p class="small">Für eine sichere Langzeit-Sicherung kannst du deine Daten exportieren und später wieder importieren.</p>
+    <div class="row"><button class="secondary" id="exportBtn">⇧ Exportieren</button><button class="secondary" id="importBackupBtn">⇩ Importieren</button><input id="backupFile" type="file" accept=".json,application/json" class="hidden"></div>
+  </div>
+  <div class="card"><button id="sample" class="secondary">Beispiel-Vokabeln laden</button> <button id="reset" class="danger">Alles löschen</button></div>
 </section>
 
-<section id="list" class="hidden">
-<div class="card">
-<h2>Meine Vokabeln</h2>
-<div id="wordList"></div>
-</div>
-</section>
+<section id="list" class="hidden"><div class="content-head"><div><h2 class="page-title">Meine Vokabeln</h2><p class="page-note">Alle Wörter und ihr aktueller Lernstatus.</p></div></div><div class="card"><div id="wordList"></div></div></section>
 
 <section id="learned" class="hidden">
-<div class="card">
-<h2>ð Gelernt</h2>
-<p class="small">Hier landen WÃ¶rter nach 5 erfolgreichen PrÃ¼fungen. Sie bleiben gespeichert und kÃ¶nnen jederzeit in einem 15er-Test geprÃ¼ft werden.</p>
-<div id="learnedCount"></div>
-</div>
-<div class="card">
-<h2>ð 15er-Test</h2>
-<p class="small">Bis zu 15 gelernte Vokabeln. Jede Antwort wird automatisch bewertet.</p>
-<button class="primary" id="startTest">15er-Test starten</button>
-<div id="testArea" class="hidden">
-<div class="small" id="testProgress"></div>
-<div class="big" id="testQuestion"></div>
-<input id="testAnswer" class="answerInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Spanische Antwort">
-<button class="primary" id="testCheck">Antwort prÃ¼fen</button>
-<div id="testFeedback" class="feedback hidden"></div>
-<button class="secondary hidden" id="testNext">NÃ¤chstes Wort</button>
-</div>
-<div id="testResult" class="hidden"></div>
-</div>
+  <div class="content-head"><div><h2 class="page-title">Gelernt 🏆</h2><p class="page-note">Wörter, die alle 5 Lernphasen geschafft haben.</p></div></div>
+  <div class="card"><div class="card-head"><div class="card-icon">🎯</div><div><h2>Dein Lernziel</h2><div id="learnedCount" class="small"></div></div></div><p class="small">Gelernte Wörter bleiben dauerhaft gespeichert und können jederzeit im 15er-Test geprüft werden.</p></div>
+  <div class="card"><div class="card-head"><div class="card-icon">📝</div><div><h2>15er-Test</h2><div class="small">Schulnoten von 1,0 bis 6,0</div></div></div>
+    <button class="primary" id="startTest">15er-Test starten</button>
+    <div id="testArea" class="hidden"><div class="small" id="testProgress"></div><div class="big" id="testQuestion"></div><input id="testAnswer" class="answerInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Spanische Antwort"><button class="primary" id="testCheck">Antwort prüfen</button><div id="testFeedback" class="feedback hidden"></div><button class="secondary hidden" id="testNext">Nächstes Wort</button></div>
+    <div id="testResult" class="hidden"></div>
+  </div>
 </section>
-</main>
-
+</main></div></div>
 <script>
+
 const KEY="vocasprint_ipad_v5";
 const BACKUP_VERSION=1;
 const INTERVALS=[0,1,24,72,168,336]; // sofort, 1h, 1d, 3d, 7d, 14d
@@ -139,8 +169,8 @@ let test={words:[],index:0,correct:0,answered:false};
 const $=id=>document.getElementById(id);
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/Ã/g,"ss").replace(/[Â¿?Â¡!.,;:()[\]"']/g,"").replace(/\s+/g," ").trim()}
-function parse(text){return text.split(/\n/).map(x=>x.trim()).filter(Boolean).map(line=>{let p=line.split(/\s*(?:â|â|;|\t|\s-\s|:)\s*/);return p.length>=2?[p[0].trim(),p.slice(1).join(" - ").trim()]:null}).filter(Boolean)}
+function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ß/g,"ss").replace(/[¿?¡!.,;:()[\]"']/g,"").replace(/\s+/g," ").trim()}
+function parse(text){return text.split(/\n/).map(x=>x.trim()).filter(Boolean).map(line=>{let p=line.split(/\s*(?:–|—|;|\t|\s-\s|:)\s*/);return p.length>=2?[p[0].trim(),p.slice(1).join(" - ").trim()]:null}).filter(Boolean)}
 function phaseLabel(p){return p>=5?"Gelernt":`Phase ${p}/5`}
 function due(w){return !w.nextDue||Date.now()>=w.nextDue}
 function intervalMs(phase){return (INTERVALS[Math.min(phase,5)]||336)*3600000}
@@ -154,11 +184,11 @@ function pick(){
 function renderLearn(){
  current=pick();checked=false;
  $("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");$("answerInput").value="";$("answerInput").disabled=false;$("checkBtn").classList.remove("hidden");
- if(!current){$("question").textContent=db.words.length?"ð Alle aktuellen Wiederholungen erledigt!":"Noch keine Vokabeln";$("learnInfo").textContent=db.words.length?"Komm spÃ¤ter fÃ¼r die nÃ¤chste Wiederholung zurÃ¼ck.":"FÃ¼ge zuerst Vokabeln hinzu.";$("phaseInfo").textContent="";$("tipView").textContent="";return}
+ if(!current){$("question").textContent=db.words.length?"🎉 Alle aktuellen Wiederholungen erledigt!":"Noch keine Vokabeln";$("learnInfo").textContent=db.words.length?"Komm später für die nächste Wiederholung zurück.":"Füge zuerst Vokabeln hinzu.";$("phaseInfo").textContent="";$("tipView").textContent="";return}
  $("question").textContent=current.es;
- $("learnInfo").textContent=`${db.words.filter(w=>!w.learned).length} offene Vokabeln Â· ${db.words.filter(w=>w.learned).length} gelernt`;
- $("phaseInfo").textContent=`${phaseLabel(current.phase||0)}${due(current)?" Â· jetzt fÃ¤llig":" Â· noch nicht fÃ¤llig"}`;
- $("tipView").textContent=current.tip||"FÃ¼r dieses Wort noch keine Merkhilfe.";
+ $("learnInfo").textContent=`${db.words.filter(w=>!w.learned).length} offene Vokabeln · ${db.words.filter(w=>w.learned).length} gelernt`;
+ $("phaseInfo").textContent=`${phaseLabel(current.phase||0)}${due(current)?" · jetzt fällig":" · noch nicht fällig"}`;
+ $("tipView").textContent=current.tip||"Für dieses Wort noch keine Merkhilfe.";
  updateOverall()
 }
 function checkAnswer(){
@@ -171,26 +201,26 @@ function checkAnswer(){
   current.wrong=current.wrong||0;
   if(current.phase>=5){current.phase=5;current.learned=true;current.learnedAt=Date.now();current.nextDue=null}
   else current.nextDue=Date.now()+intervalMs(current.phase);
-  $("feedback").className="feedback ok";$("feedback").innerHTML=`â Richtig! <b>${esc(current.es)}</b>${current.phase>=5?"<br>ð Dieses Wort ist jetzt gelernt!":`<br>${phaseLabel(current.phase)} â nÃ¤chste PrÃ¼fung spÃ¤ter`}`;
+  $("feedback").className="feedback ok";$("feedback").innerHTML=`✅ Richtig! <b>${esc(current.es)}</b>${current.phase>=5?"<br>🏆 Dieses Wort ist jetzt gelernt!":`<br>${phaseLabel(current.phase)} – nächste Prüfung später`}`;
  }else{
   current.wrong=(current.wrong||0)+1;current.phase=0;current.nextDue=Date.now()+intervalMs(0);
-  $("feedback").className="feedback wrong";$("feedback").innerHTML=`â Nicht ganz.<br>Richtig wÃ¤re: <b>${esc(current.es)}</b><br><span class="small">Die Vokabel startet wieder bei Phase 0 und wird erneut geprÃ¼ft.</span>`;
+  $("feedback").className="feedback wrong";$("feedback").innerHTML=`❌ Nicht ganz.<br>Richtig wäre: <b>${esc(current.es)}</b><br><span class="small">Die Vokabel startet wieder bei Phase 0 und wird erneut geprüft.</span>`;
  }
  save();$("feedback").classList.remove("hidden");$("answerInput").disabled=true;$("checkBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");renderTips();renderList();updateOverall();
 }
 function next(){renderLearn()}
 function updateOverall(){
  let total=db.words.length, learned=db.words.filter(w=>w.learned).length;
- $("overall").textContent=`${learned} von ${total} Vokabeln gelernt Â· ${total?Math.round(learned/total*100):0}%`;
+ $("overall").textContent=`${learned} von ${total} Vokabeln gelernt · ${total?Math.round(learned/total*100):0}%`;
  $("overallBar").style.width=(total?learned/total*100:0)+"%";
 }
 function renderTips(){
  let s=$("tipWord");s.innerHTML="";
- db.words.forEach((w,i)=>{let o=document.createElement("option");o.value=i;o.textContent=`${w.es} â ${w.de}`;s.appendChild(o)});
+ db.words.forEach((w,i)=>{let o=document.createElement("option");o.value=i;o.textContent=`${w.es} – ${w.de}`;s.appendChild(o)});
  if(db.words.length){let w=db.words[Number(s.value)]||db.words[0];$("tipText").value=w.tip||""}
 }
 function renderList(){
- $("wordList").innerHTML=db.words.length?db.words.map(w=>`<div class="word"><b>${esc(w.es)}</b> â ${esc(w.de)}<div><span class="pill">${phaseLabel(w.phase||0)}</span><span class="pill">${w.correct||0}Ã richtig</span><span class="pill">${w.wrong||0}Ã falsch</span>${w.tip?"<span class='pill'>ð¡ Merkhilfe</span>":""}</div></div>`).join(""):"Noch keine Vokabeln.";
+ $("wordList").innerHTML=db.words.length?db.words.map(w=>`<div class="word"><b>${esc(w.es)}</b> – ${esc(w.de)}<div><span class="pill">${phaseLabel(w.phase||0)}</span><span class="pill">${w.correct||0}× richtig</span><span class="pill">${w.wrong||0}× falsch</span>${w.tip?"<span class='pill'>💡 Merkhilfe</span>":""}</div></div>`).join(""):"Noch keine Vokabeln.";
 }
 function renderLearned(){ $("learnedCount").innerHTML=`<b>${db.words.filter(w=>w.learned).length}</b> gelernte Vokabeln` }
 function renderAll(){renderLearn();renderTips();renderList();renderLearned()}
@@ -201,12 +231,12 @@ $("nextBtn").onclick=next;
 $("addBtn").onclick=()=>{
  let arr=parse($("importText").value),added=0;
  arr.forEach(([es,de])=>{if(!db.words.some(w=>norm(w.es)===norm(es)&&norm(w.de)===norm(de))){db.words.push({es,de,tip:"",phase:0,learned:false,correct:0,wrong:0,nextDue:Date.now()});added++}});
- save();$("importText").value="";$("importMsg").textContent=`${added} neue Vokabel(n) hinzugefÃ¼gt.`;renderAll()
+ save();$("importText").value="";$("importMsg").textContent=`${added} neue Vokabel(n) hinzugefügt.`;renderAll()
 };
 $("tipWord").onchange=()=>{let w=db.words[Number($("tipWord").value)];$("tipText").value=w?.tip||""};
 $("saveTip").onclick=()=>{let i=Number($("tipWord").value);if(!db.words[i])return;db.words[i].tip=$("tipText").value.trim();save();$("importMsg").textContent="Merkhilfe gespeichert.";renderAll()};
-$("sample").onclick=()=>{$("importText").value="hola â hallo\ngracias â danke\npor favor â bitte\ncomer â essen\nbeber â trinken\ncasa â Haus"};
-$("reset").onclick=()=>{if(confirm("Wirklich alle Vokabeln und den gesamten Lernstand lÃ¶schen?")){db={words:[],answers:0,correct:0,createdAt:Date.now()};save();renderAll()}};
+$("sample").onclick=()=>{$("importText").value="hola – hallo\ngracias – danke\npor favor – bitte\ncomer – essen\nbeber – trinken\ncasa – Haus"};
+$("reset").onclick=()=>{if(confirm("Wirklich alle Vokabeln und den gesamten Lernstand löschen?")){db={words:[],answers:0,correct:0,createdAt:Date.now()};save();renderAll()}};
 
 $("exportBtn").onclick=()=>{
  const data={app:"VocaSprint",version:BACKUP_VERSION,savedAt:new Date().toISOString(),db};
@@ -216,11 +246,11 @@ $("exportBtn").onclick=()=>{
 $("importBackupBtn").onclick=()=>$("backupFile").click();
 $("backupFile").onchange=e=>{
  const f=e.target.files[0];if(!f)return;
- const r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.db||!Array.isArray(x.db.words))throw Error();db=x.db;save();renderAll();alert("Sicherung erfolgreich geladen.")}catch(err){alert("Diese Datei ist keine gÃ¼ltige VocaSprint-Sicherung.")}};r.readAsText(f);e.target.value=""
+ const r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.db||!Array.isArray(x.db.words))throw Error();db=x.db;save();renderAll();alert("Sicherung erfolgreich geladen.")}catch(err){alert("Diese Datei ist keine gültige VocaSprint-Sicherung.")}};r.readAsText(f);e.target.value=""
 };
 
 function grade(correct,total){
- if(total===0)return "â";
+ if(total===0)return "–";
  let p=correct/total;
  if(p>=1)return "1,0";
  if(p>=.93)return "1,3";
@@ -236,7 +266,7 @@ function grade(correct,total){
 }
 function startTest(){
  let learned=db.words.filter(w=>w.learned);
- if(!learned.length){alert("Noch keine Vokabeln im Tab âGelerntâ.");return}
+ if(!learned.length){alert("Noch keine Vokabeln im Tab „Gelernt“.");return}
  test={words:shuffle(learned).slice(0,15),index:0,correct:0,answered:false};
  $("testArea").classList.remove("hidden");$("testResult").classList.add("hidden");renderTest();
 }
@@ -252,20 +282,33 @@ function checkTest(){
  let w=test.words[test.index],ok=norm($("testAnswer").value)===norm(w.es);
  if(ok)test.correct++;
  $("testFeedback").className="feedback "+(ok?"ok":"wrong");
- $("testFeedback").innerHTML=ok?"â Richtig!":`â Richtig wÃ¤re: <b>${esc(w.es)}</b>`;
+ $("testFeedback").innerHTML=ok?"✅ Richtig!":`❌ Richtig wäre: <b>${esc(w.es)}</b>`;
  $("testFeedback").classList.remove("hidden");$("testAnswer").disabled=true;$("testCheck").classList.add("hidden");$("testNext").classList.remove("hidden")
 }
 function nextTest(){test.index++;renderTest()}
 function finishTest(){
  let total=test.words.length,g=grade(test.correct,total);
  $("testArea").classList.add("hidden");$("testResult").classList.remove("hidden");
- $("testResult").innerHTML=`<div class="grade">Note ${g}</div><div class="center"><b>${test.correct} / ${total} richtig</b><br><span class="small">Die 15er-Tests sind zusÃ¤tzliche Kontrolle und verÃ¤ndern den 5-Phasen-Status nicht.</span></div><br><button class="primary" id="againTest">Nochmal testen</button>`;
+ $("testResult").innerHTML=`<div class="grade">Note ${g}</div><div class="center"><b>${test.correct} / ${total} richtig</b><br><span class="small">Die 15er-Tests sind zusätzliche Kontrolle und verändern den 5-Phasen-Status nicht.</span></div><br><button class="primary" id="againTest">Nochmal testen</button>`;
  $("againTest").onclick=startTest
 }
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
 $("startTest").onclick=startTest;$("testCheck").onclick=checkTest;$("testNext").onclick=nextTest;
 $("testAnswer").addEventListener("keydown",e=>{if(e.key==="Enter")checkTest()});
 renderAll();
+
+</script>
+<script>
+// Kleine Design-Ergänzung für die Fortschrittsanzeige im Header
+const oldUpdateOverall=updateOverall;
+updateOverall=function(){
+  oldUpdateOverall();
+  const total=db.words.length, learned=db.words.filter(w=>w.learned).length;
+  const hp=document.getElementById("headerProgress"), hb=document.getElementById("headerBar");
+  if(hp) hp.textContent=`${learned} / ${total}`;
+  if(hb) hb.style.width=(total?learned/total*100:0)+"%";
+};
+renderAll();
 </script>
 </body>
- </html>
+</html>
