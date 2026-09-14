@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#5b5cf0">
+<meta name="description" content="VocaSprint – Spanisch-Vokabeln clever lernen">
+<link rel="manifest" href="manifest.json">
+<title>VocaSprint</title>
+<style>
+:root{--bg:#f5f6fb;--card:#fff;--text:#172033;--muted:#667085;--primary:#5b5cf0;--primary2:#4546d8;--good:#159957;--bad:#d92d20;--line:#e1e4ec}
+*{box-sizing:border-box}html{font-size:16px}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:#17192b;color:#fff;padding:28px 18px 24px}header h1{margin:0;font-size:29px}header p{margin:5px 0 0;color:#c7cada}
+main{max-width:920px;margin:auto;padding:16px 14px 40px}
+nav{display:flex;gap:8px;overflow:auto;padding:4px 0 14px;position:sticky;top:0;background:var(--bg);z-index:5}
+nav button{white-space:nowrap}
+button,.button,.navBtn{border:0;border-radius:12px;padding:12px 15px;font-weight:750;font-size:15px;cursor:pointer;background:#e8eaf1;color:var(--text);-webkit-tap-highlight-color:transparent;text-decoration:none;display:inline-block}
+button:active{transform:scale(.98)}button.primary,.button.primary{background:var(--primary);color:#fff}button.good{background:var(--good);color:#fff}button.bad{background:var(--bad);color:#fff}
+.card{background:var(--card);border-radius:20px;padding:20px;box-shadow:0 6px 28px #18203b12;margin-bottom:14px}
+.hidden{display:none!important}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.statbox{background:#f7f7fc;border-radius:14px;padding:14px}.small{font-size:13px;color:var(--muted)}.stat{font-size:28px;font-weight:850;margin-top:3px}
+.word{font-size:46px;font-weight:850;text-align:center;margin:35px 0 6px}.answer{text-align:center;font-size:21px;font-weight:750}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}
+textarea,input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font:inherit;background:#fff;color:var(--text)}
+textarea{min-height:170px;resize:vertical}.field{margin:12px 0}.field label{font-weight:750;display:block;margin-bottom:6px}
+.notice{background:#f0f1ff;border-radius:13px;padding:13px;margin:12px 0}
+.row{display:grid;grid-template-columns:1fr 1fr 1.4fr auto;gap:7px;margin:8px 0}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+.progress{height:10px;background:#e6e8ef;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--primary);width:0}
+.pill{display:inline-block;border-radius:99px;padding:5px 9px;background:#eeeefe;font-size:12px}
+.bigIcon{text-align:center;font-size:40px}.muted{color:var(--muted)}
+.empty{text-align:center;padding:35px 10px;color:var(--muted)}
+@media(max-width:650px){.grid{grid-template-columns:1fr 1fr}.grid .statbox:last-child{grid-column:span 2}.row{grid-template-columns:1fr 1fr}.row input:nth-child(3){grid-column:span 2}.row button{grid-column:span 2}.word{font-size:38px}}
+</style>
+</head>
+<body>
+<header>
+<h1>🇪🇸 VocaSprint</h1>
+<p>Spanisch-Vokabeln schnell und gezielt lernen</p>
+</header>
+
+<main>
+<nav aria-label="Hauptmenü">
+<a class="navBtn primary" id="tabLearn" href="#learn">🧠 Lernen</a>
+<a class="navBtn" id="tabImport" href="#import">📋 Importieren</a>
+<a class="navBtn" id="tabWords" href="#words">📚 Vokabeln</a>
+</nav>
+
+<section id="learn">
+<div class="card">
+<div class="grid">
+<div class="statbox"><div class="small">Heute</div><div class="stat" id="statToday">0</div></div>
+<div class="statbox"><div class="small">Trefferquote</div><div class="stat" id="statRate">0%</div></div>
+<div class="statbox"><div class="small">Noch unsicher</div><div class="stat" id="statOpen">0</div></div>
+</div>
+</div>
+<div class="card" id="quiz"></div>
+</section>
+
+<section id="import" class="hidden">
+<div class="card">
+<h2>📋 Vokabeln einfügen</h2>
+<p class="muted">Kopiere den Text, den du aus einem Foto/Scan erhalten hast, hier hinein. Eine Vokabel pro Zeile.</p>
+<div class="notice"><b>Beispiel</b><br>casa – Haus<br>comer – essen<br>hablar – sprechen</div>
+<div class="field"><label for="bulk">Text</label><textarea id="bulk" placeholder="casa – Haus
+comer – essen
+hablar – sprechen"></textarea></div>
+<p class="small">Erkannt werden u. a. „–“, „-“, „;“, „:“ und Tabulatoren als Trennzeichen.</p>
+<div class="actions" style="justify-content:flex-start">
+<button class="primary" onclick="previewImport()">🔎 Erkennen</button>
+<button onclick="sample()">Beispiel einsetzen</button>
+</div>
+<div id="preview" class="hidden"></div>
+</div>
+</section>
+
+<section id="words" class="hidden">
+<div class="card">
+<h2>📚 Meine Vokabeln</h2>
+<p class="small">Hier kannst du Übersetzungen und deine eigenen Eselsbrücken jederzeit ändern.</p>
+<div id="wordList"></div>
+</div>
+</section>
+</main>
+
+<script>
+const KEY="vocasprint_v3";
+const DEFAULT={words:[],today:0,totalAnswers:0,totalCorrect:0,lastDay:""};
+let db=load();
+let current=null,revealed=false,previewWords=[];
+
+function load(){
+ try{return {...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...DEFAULT}}
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function todayReset(){
+ const d=new Date().toISOString().slice(0,10);
+ if(db.lastDay!==d){db.lastDay=d;db.today=0;save()}
+}
+todayReset();
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function attr(s){return esc(s)}
+
+function showTab(id){
+ ["learn","import","words"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ ["tabLearn","tabImport","tabWords"].forEach(x=>document.getElementById(x).classList.remove("primary"));
+ document.getElementById({learn:"tabLearn",import:"tabImport",words:"tabWords"}[id]).classList.add("primary");
+ if(id==="learn"){current=null;nextCard()} else renderAll();
+}
+function syncHash(){
+  const id=location.hash.replace("#","");
+  if(["learn","import","words"].includes(id)) showTab(id);
+  else showTab("learn");
+}
+window.addEventListener("hashchange",syncHash);
+
+function parseLines(text){
+ return text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{
+   let p=line.split(/\s*(?:–|—|;|\t|:|\s+-\s+)\s*/);
+   if(p.length<2){let m=line.match(/^(.+?)\s{2,}(.+)$/);if(m)p=[m[1],m[2]]}
+   if(p.length<2)return null;
+   let es=p[0].trim().replace(/^[•·*-]\s*/,"");
+   let de=p.slice(1).join(" ").trim();
+   return es&&de?{es,de,tip:"",box:0,correct:0,wrong:0,lastSeen:0}:null;
+ }).filter(Boolean);
+}
+
+function previewImport(){
+ previewWords=parseLines(document.getElementById("bulk").value);
+ const box=document.getElementById("preview");box.classList.remove("hidden");
+ if(!previewWords.length){
+   box.innerHTML='<div class="notice">⚠️ Keine Vokabelpaare erkannt. Beispiel: <b>casa – Haus</b></div>';return;
+ }
+ box.innerHTML='<div class="notice"><b>'+previewWords.length+' Vokabeln erkannt.</b> Du kannst sie jetzt prüfen und eigene Eselsbrücken ergänzen.</div>'+
+ previewWords.map((w,i)=>'<div class="row"><input id="es'+i+'" value="'+attr(w.es)+'"><input id="de'+i+'" value="'+attr(w.de)+'"><input id="tip'+i+'" placeholder="💡 Eigene Eselsbrücke"></div>').join("")+
+ '<div class="actions" style="justify-content:flex-start"><button class="primary" onclick="addPreview()">✅ Hinzufügen</button></div>';
+}
+function addPreview(){
+ const out=[];
+ previewWords.forEach((w,i)=>{
+   const es=document.getElementById("es"+i).value.trim(),de=document.getElementById("de"+i).value.trim(),tip=document.getElementById("tip"+i).value.trim();
+   if(es&&de)out.push({...w,es,de,tip});
+ });
+ db.words.push(...out);save();
+ document.getElementById("bulk").value="";document.getElementById("preview").classList.add("hidden");
+ alert(out.length+" Vokabeln hinzugefügt.");showTab("learn");
+}
+function sample(){document.getElementById("bulk").value="casa – Haus\ncomer – essen\nhablar – sprechen\nbeber – trinken\nescuela – Schule\namigo – Freund\nlibro – Buch\nrápido – schnell";}
+
+function chooseCard(){
+ if(!db.words.length)return null;
+ let pool=db.words.filter(w=>w.box<5);
+ if(!pool.length)pool=db.words;
+ pool.sort((a,b)=>a.box-b.box || a.lastSeen-b.lastSeen || b.wrong-a.wrong);
+ return pool[0];
+}
+function nextCard(){revealed=false;current=chooseCard();renderQuiz()}
+function renderQuiz(){
+ const q=document.getElementById("quiz");
+ if(!db.words.length){
+   q.innerHTML='<div class="empty"><div class="bigIcon">📚</div><h2>Noch keine Vokabeln</h2><p>Gehe auf „Importieren“ und füge deine Vokabelliste ein.</p><button class="primary" onclick="showTab(\'import\')">Vokabeln importieren</button></div>';return;
+ }
+ if(!current)current=chooseCard();
+ if(!current)return;
+ q.innerHTML='<div class="small">Übersetze ins Spanische</div><div class="word">'+esc(current.de)+'</div>'+
+ (revealed?
+ '<div class="answer">'+esc(current.es)+'</div>'+
+ '<div class="notice"><b>💡 Eselsbrücke</b><br>'+esc(current.tip||"Keine eigene Eselsbrücke gespeichert.")+'</div>'+
+ '<div class="actions"><button class="bad" onclick="answer(false)">❌ Falsch</button><button class="good" onclick="answer(true)">✅ Richtig</button></div>'
+ :
+ '<div class="answer muted">Sag die spanische Antwort laut oder denke sie dir.</div><div class="actions"><button class="primary" onclick="revealed=true;renderQuiz()">Antwort anzeigen</button></div>');
+}
+function answer(ok){
+ db.today++;db.totalAnswers++;current.lastSeen=Date.now();
+ if(ok){db.totalCorrect++;current.correct++;current.box=Math.min(5,current.box+1)}
+ else{current.wrong++;current.box=0}
+ save();current=null;nextCard();updateStats();
+}
+function updateStats(){
+ document.getElementById("statToday").textContent=db.today;
+ document.getElementById("statRate").textContent=(db.totalAnswers?Math.round(db.totalCorrect/db.totalAnswers*100):0)+"%";
+ document.getElementById("statOpen").textContent=db.words.filter(w=>w.box<5).length;
+}
+function renderList(){
+ const el=document.getElementById("wordList");
+ if(!db.words.length){el.innerHTML='<div class="empty">Noch keine Vokabeln.</div>';return}
+ el.innerHTML=db.words.map((w,i)=>'<div class="row">'+
+ '<input value="'+attr(w.es)+'" onchange="editWord('+i+',\'es\',this.value)">'+
+ '<input value="'+attr(w.de)+'" onchange="editWord('+i+',\'de\',this.value)">'+
+ '<input value="'+attr(w.tip)+'" placeholder="💡 Eigene Eselsbrücke" onchange="editWord('+i+',\'tip\',this.value)">'+
+ '<button class="bad" onclick="deleteWord('+i+')">×</button></div>').join("");
+}
+function editWord(i,k,v){db.words[i][k]=v;save();renderAll()}
+function deleteWord(i){if(confirm("Vokabel wirklich löschen?")){db.words.splice(i,1);save();renderAll()}}
+function renderAll(){updateStats();renderQuiz();renderList()}
+
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+syncHash();
+</script>
+</body>
+</html>
