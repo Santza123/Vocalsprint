@@ -3,201 +3,269 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#5b5cf0">
-<meta name="description" content="VocaSprint – Spanisch-Vokabeln clever lernen">
-<link rel="manifest" href="manifest.json">
-<title>VocaSprint</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>VocaSprint V5</title>
 <style>
-:root{--bg:#f5f6fb;--card:#fff;--text:#172033;--muted:#667085;--primary:#5b5cf0;--primary2:#4546d8;--good:#159957;--bad:#d92d20;--line:#e1e4ec}
-*{box-sizing:border-box}html{font-size:16px}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-header{background:#17192b;color:#fff;padding:28px 18px 24px}header h1{margin:0;font-size:29px}header p{margin:5px 0 0;color:#c7cada}
-main{max-width:920px;margin:auto;padding:16px 14px 40px}
-nav{display:flex;gap:8px;overflow:auto;padding:4px 0 14px;position:sticky;top:0;background:var(--bg);z-index:5}
-nav button{white-space:nowrap}
-button,.button,.navBtn{border:0;border-radius:12px;padding:12px 15px;font-weight:750;font-size:15px;cursor:pointer;background:#e8eaf1;color:var(--text);-webkit-tap-highlight-color:transparent;text-decoration:none;display:inline-block}
-button:active{transform:scale(.98)}button.primary,.button.primary{background:var(--primary);color:#fff}button.good{background:var(--good);color:#fff}button.bad{background:var(--bad);color:#fff}
-.card{background:var(--card);border-radius:20px;padding:20px;box-shadow:0 6px 28px #18203b12;margin-bottom:14px}
-.hidden{display:none!important}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.statbox{background:#f7f7fc;border-radius:14px;padding:14px}.small{font-size:13px;color:var(--muted)}.stat{font-size:28px;font-weight:850;margin-top:3px}
-.word{font-size:46px;font-weight:850;text-align:center;margin:35px 0 6px}.answer{text-align:center;font-size:21px;font-weight:750}
-.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}
-textarea,input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font:inherit;background:#fff;color:var(--text)}
-textarea{min-height:170px;resize:vertical}.field{margin:12px 0}.field label{font-weight:750;display:block;margin-bottom:6px}
-.notice{background:#f0f1ff;border-radius:13px;padding:13px;margin:12px 0}
-.row{display:grid;grid-template-columns:1fr 1fr 1.4fr auto;gap:7px;margin:8px 0}
-hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-.progress{height:10px;background:#e6e8ef;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--primary);width:0}
-.pill{display:inline-block;border-radius:99px;padding:5px 9px;background:#eeeefe;font-size:12px}
-.bigIcon{text-align:center;font-size:40px}.muted{color:var(--muted)}
-.empty{text-align:center;padding:35px 10px;color:var(--muted)}
-@media(max-width:650px){.grid{grid-template-columns:1fr 1fr}.grid .statbox:last-child{grid-column:span 2}.row{grid-template-columns:1fr 1fr}.row input:nth-child(3){grid-column:span 2}.row button{grid-column:span 2}.word{font-size:38px}}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f5f8;color:#202124;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:780px;margin:auto;padding:16px 14px 45px}
+h1{font-size:29px;margin:4px 0}.sub{color:#666;margin-bottom:14px}
+.tabs{display:flex;gap:7px;overflow-x:auto;position:sticky;top:0;background:#f4f5f8;padding:6px 0 10px;z-index:3}
+.tab{flex:1;min-width:92px;border:0;border-radius:12px;padding:12px 7px;font-size:15px;font-weight:750;background:#ddd;cursor:pointer}
+.tab.active{background:#5759e8;color:#fff}
+.card{background:#fff;border-radius:18px;padding:17px;margin-bottom:13px;box-shadow:0 2px 12px #0000000c}
+.big{font-size:34px;font-weight:800;text-align:center;margin:13px 0}
+.center{text-align:center}
+.small{font-size:14px;color:#666}
+input,textarea,select{width:100%;font:inherit;padding:13px;border:1px solid #c9cbd2;border-radius:12px;margin:6px 0 11px;background:#fff}
+.answerInput{font-size:21px;text-align:center}
+button{border:0;border-radius:12px;padding:12px 15px;font:inherit;font-weight:750;cursor:pointer}
+.primary{background:#5759e8;color:white}.good{background:#dff5e5}.bad{background:#ffe0e0}
+.secondary{background:#e9eaf0}.danger{background:#f7d7d7}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+.hidden{display:none!important}
+.feedback{padding:13px;border-radius:12px;margin:10px 0;font-weight:650}
+.ok{background:#dff5e5}.wrong{background:#ffe0e0}
+.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#ececf3;font-size:12px;margin:2px}
+.word{padding:12px 0;border-bottom:1px solid #eee}
+.progressbar{height:10px;background:#e5e6eb;border-radius:99px;overflow:hidden}.progressbar>div{height:100%;background:#5759e8}
+.grade{font-size:42px;font-weight:850;text-align:center;margin:8px}
+.notice{padding:12px;border-radius:12px;background:#fff4cf;margin-bottom:12px}
+hr{border:0;border-top:1px solid #eee;margin:14px 0}
 </style>
 </head>
 <body>
-<header>
-<h1>🇪🇸 VocaSprint</h1>
-<p>Spanisch-Vokabeln schnell und gezielt lernen</p>
-</header>
-
 <main>
-<nav aria-label="Hauptmenü">
-<a class="navBtn primary" id="tabLearn" href="#learn">🧠 Lernen</a>
-<a class="navBtn" id="tabImport" href="#import">📋 Importieren</a>
-<a class="navBtn" id="tabWords" href="#words">📚 Vokabeln</a>
-</nav>
+<h1>ðªð¸ VocaSprint</h1>
+<div class="sub">5-Phasen-Lernen mit automatischer Korrektur</div>
+
+<div class="tabs">
+<button class="tab active" data-page="learn">ð§  Lernen</button>
+<button class="tab" data-page="import">â Vokabeln</button>
+<button class="tab" data-page="list">ð Liste</button>
+<button class="tab" data-page="learned">ð Gelernt</button>
+</div>
 
 <section id="learn">
+<div class="card center">
+<div class="small" id="learnInfo"></div>
+<div class="big" id="question">Noch keine Vokabeln</div>
+<div id="phaseInfo" class="small"></div>
+<input id="answerInput" class="answerInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Spanische Antwort eingeben">
+<button class="primary" id="checkBtn">Antwort prÃ¼fen</button>
+<div id="feedback" class="feedback hidden"></div>
+<button class="secondary hidden" id="nextBtn">NÃ¤chstes Wort</button>
+</div>
 <div class="card">
-<div class="grid">
-<div class="statbox"><div class="small">Heute</div><div class="stat" id="statToday">0</div></div>
-<div class="statbox"><div class="small">Trefferquote</div><div class="stat" id="statRate">0%</div></div>
-<div class="statbox"><div class="small">Noch unsicher</div><div class="stat" id="statOpen">0</div></div>
+<strong>ð¡ Merkhilfe</strong>
+<div id="tipView" class="small" style="margin-top:7px">â</div>
 </div>
+<div class="card">
+<strong>Dein langfristiger Fortschritt</strong>
+<div class="small" id="overall"></div>
+<div class="progressbar" style="margin-top:8px"><div id="overallBar" style="width:0%"></div></div>
 </div>
-<div class="card" id="quiz"></div>
 </section>
 
 <section id="import" class="hidden">
 <div class="card">
-<h2>📋 Vokabeln einfügen</h2>
-<p class="muted">Kopiere den Text, den du aus einem Foto/Scan erhalten hast, hier hinein. Eine Vokabel pro Zeile.</p>
-<div class="notice"><b>Beispiel</b><br>casa – Haus<br>comer – essen<br>hablar – sprechen</div>
-<div class="field"><label for="bulk">Text</label><textarea id="bulk" placeholder="casa – Haus
-comer – essen
-hablar – sprechen"></textarea></div>
-<p class="small">Erkannt werden u. a. „–“, „-“, „;“, „:“ und Tabulatoren als Trennzeichen.</p>
-<div class="actions" style="justify-content:flex-start">
-<button class="primary" onclick="previewImport()">🔎 Erkennen</button>
-<button onclick="sample()">Beispiel einsetzen</button>
+<h2>Vokabeln hinzufÃ¼gen</h2>
+<p class="small">Eine Zeile pro Wort: <b>spanisch â deutsch</b></p>
+<textarea id="importText" placeholder="hola â hallo&#10;gracias â danke&#10;comer â essen"></textarea>
+<button class="primary" id="addBtn">Vokabeln hinzufÃ¼gen</button>
+<div id="importMsg" class="small"></div>
 </div>
-<div id="preview" class="hidden"></div>
+<div class="card">
+<h2>ð¡ Merkhilfe</h2>
+<select id="tipWord"></select>
+<textarea id="tipText" placeholder="Deine persÃ¶nliche EselsbrÃ¼cke..."></textarea>
+<button class="primary" id="saveTip">Merkhilfe speichern</button>
+</div>
+<div class="card">
+<h2>ð¾ Sicherung</h2>
+<p class="small">Der Lernstand wird lokal auf diesem GerÃ¤t gespeichert. FÃ¼r eine sichere Langzeit-Sicherung kannst du eine Datei exportieren und spÃ¤ter wieder importieren.</p>
+<div class="row">
+<button id="exportBtn">Fortschritt sichern</button>
+<button id="importBackupBtn">Sicherung laden</button>
+<input id="backupFile" type="file" accept=".json,application/json" class="hidden">
+</div>
+</div>
+<div class="card">
+<button id="sample">Beispiel-Vokabeln laden</button>
+<button id="reset" class="danger" style="margin-left:5px">Alles lÃ¶schen</button>
 </div>
 </section>
 
-<section id="words" class="hidden">
+<section id="list" class="hidden">
 <div class="card">
-<h2>📚 Meine Vokabeln</h2>
-<p class="small">Hier kannst du Übersetzungen und deine eigenen Eselsbrücken jederzeit ändern.</p>
+<h2>Meine Vokabeln</h2>
 <div id="wordList"></div>
+</div>
+</section>
+
+<section id="learned" class="hidden">
+<div class="card">
+<h2>ð Gelernt</h2>
+<p class="small">Hier landen WÃ¶rter nach 5 erfolgreichen PrÃ¼fungen. Sie bleiben gespeichert und kÃ¶nnen jederzeit in einem 15er-Test geprÃ¼ft werden.</p>
+<div id="learnedCount"></div>
+</div>
+<div class="card">
+<h2>ð 15er-Test</h2>
+<p class="small">Bis zu 15 gelernte Vokabeln. Jede Antwort wird automatisch bewertet.</p>
+<button class="primary" id="startTest">15er-Test starten</button>
+<div id="testArea" class="hidden">
+<div class="small" id="testProgress"></div>
+<div class="big" id="testQuestion"></div>
+<input id="testAnswer" class="answerInput" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Spanische Antwort">
+<button class="primary" id="testCheck">Antwort prÃ¼fen</button>
+<div id="testFeedback" class="feedback hidden"></div>
+<button class="secondary hidden" id="testNext">NÃ¤chstes Wort</button>
+</div>
+<div id="testResult" class="hidden"></div>
 </div>
 </section>
 </main>
 
 <script>
-const KEY="vocasprint_v3";
-const DEFAULT={words:[],today:0,totalAnswers:0,totalCorrect:0,lastDay:""};
-let db=load();
-let current=null,revealed=false,previewWords=[];
+const KEY="vocasprint_ipad_v5";
+const BACKUP_VERSION=1;
+const INTERVALS=[0,1,24,72,168,336]; // sofort, 1h, 1d, 3d, 7d, 14d
+let db={words:[],answers:0,correct:0,createdAt:Date.now()};
+try{db=Object.assign(db,JSON.parse(localStorage.getItem(KEY))||{})}catch(e){}
+let current=null, checked=false;
+let test={words:[],index:0,correct:0,answered:false};
 
-function load(){
- try{return {...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...DEFAULT}}
-}
+const $=id=>document.getElementById(id);
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
-function todayReset(){
- const d=new Date().toISOString().slice(0,10);
- if(db.lastDay!==d){db.lastDay=d;db.today=0;save()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/Ã/g,"ss").replace(/[Â¿?Â¡!.,;:()[\]"']/g,"").replace(/\s+/g," ").trim()}
+function parse(text){return text.split(/\n/).map(x=>x.trim()).filter(Boolean).map(line=>{let p=line.split(/\s*(?:â|â|;|\t|\s-\s|:)\s*/);return p.length>=2?[p[0].trim(),p.slice(1).join(" - ").trim()]:null}).filter(Boolean)}
+function phaseLabel(p){return p>=5?"Gelernt":`Phase ${p}/5`}
+function due(w){return !w.nextDue||Date.now()>=w.nextDue}
+function intervalMs(phase){return (INTERVALS[Math.min(phase,5)]||336)*3600000}
+function pick(){
+ let active=db.words.filter(w=>!w.learned&&due(w));
+ if(!active.length) active=db.words.filter(w=>!w.learned);
+ if(!active.length)return null;
+ active.sort((a,b)=>(a.phase||0)-(b.phase||0)||(a.nextDue||0)-(b.nextDue||0)||(b.wrong||0)-(a.wrong||0));
+ return active[0];
 }
-todayReset();
-
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-function attr(s){return esc(s)}
-
-function showTab(id){
- ["learn","import","words"].forEach(x=>document.getElementById(x).classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
- ["tabLearn","tabImport","tabWords"].forEach(x=>document.getElementById(x).classList.remove("primary"));
- document.getElementById({learn:"tabLearn",import:"tabImport",words:"tabWords"}[id]).classList.add("primary");
- if(id==="learn"){current=null;nextCard()} else renderAll();
+function renderLearn(){
+ current=pick();checked=false;
+ $("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");$("answerInput").value="";$("answerInput").disabled=false;$("checkBtn").classList.remove("hidden");
+ if(!current){$("question").textContent=db.words.length?"ð Alle aktuellen Wiederholungen erledigt!":"Noch keine Vokabeln";$("learnInfo").textContent=db.words.length?"Komm spÃ¤ter fÃ¼r die nÃ¤chste Wiederholung zurÃ¼ck.":"FÃ¼ge zuerst Vokabeln hinzu.";$("phaseInfo").textContent="";$("tipView").textContent="";return}
+ $("question").textContent=current.es;
+ $("learnInfo").textContent=`${db.words.filter(w=>!w.learned).length} offene Vokabeln Â· ${db.words.filter(w=>w.learned).length} gelernt`;
+ $("phaseInfo").textContent=`${phaseLabel(current.phase||0)}${due(current)?" Â· jetzt fÃ¤llig":" Â· noch nicht fÃ¤llig"}`;
+ $("tipView").textContent=current.tip||"FÃ¼r dieses Wort noch keine Merkhilfe.";
+ updateOverall()
 }
-function syncHash(){
-  const id=location.hash.replace("#","");
-  if(["learn","import","words"].includes(id)) showTab(id);
-  else showTab("learn");
-}
-window.addEventListener("hashchange",syncHash);
-
-function parseLines(text){
- return text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{
-   let p=line.split(/\s*(?:–|—|;|\t|:|\s+-\s+)\s*/);
-   if(p.length<2){let m=line.match(/^(.+?)\s{2,}(.+)$/);if(m)p=[m[1],m[2]]}
-   if(p.length<2)return null;
-   let es=p[0].trim().replace(/^[•·*-]\s*/,"");
-   let de=p.slice(1).join(" ").trim();
-   return es&&de?{es,de,tip:"",box:0,correct:0,wrong:0,lastSeen:0}:null;
- }).filter(Boolean);
-}
-
-function previewImport(){
- previewWords=parseLines(document.getElementById("bulk").value);
- const box=document.getElementById("preview");box.classList.remove("hidden");
- if(!previewWords.length){
-   box.innerHTML='<div class="notice">⚠️ Keine Vokabelpaare erkannt. Beispiel: <b>casa – Haus</b></div>';return;
+function checkAnswer(){
+ if(!current||checked)return;
+ let user=norm($("answerInput").value), expected=norm(current.es);
+ checked=true;db.answers++;
+ let ok=user===expected;
+ if(ok){
+  db.correct++;current.correct=(current.correct||0)+1;current.phase=(current.phase||0)+1;
+  current.wrong=current.wrong||0;
+  if(current.phase>=5){current.phase=5;current.learned=true;current.learnedAt=Date.now();current.nextDue=null}
+  else current.nextDue=Date.now()+intervalMs(current.phase);
+  $("feedback").className="feedback ok";$("feedback").innerHTML=`â Richtig! <b>${esc(current.es)}</b>${current.phase>=5?"<br>ð Dieses Wort ist jetzt gelernt!":`<br>${phaseLabel(current.phase)} â nÃ¤chste PrÃ¼fung spÃ¤ter`}`;
+ }else{
+  current.wrong=(current.wrong||0)+1;current.phase=0;current.nextDue=Date.now()+intervalMs(0);
+  $("feedback").className="feedback wrong";$("feedback").innerHTML=`â Nicht ganz.<br>Richtig wÃ¤re: <b>${esc(current.es)}</b><br><span class="small">Die Vokabel startet wieder bei Phase 0 und wird erneut geprÃ¼ft.</span>`;
  }
- box.innerHTML='<div class="notice"><b>'+previewWords.length+' Vokabeln erkannt.</b> Du kannst sie jetzt prüfen und eigene Eselsbrücken ergänzen.</div>'+
- previewWords.map((w,i)=>'<div class="row"><input id="es'+i+'" value="'+attr(w.es)+'"><input id="de'+i+'" value="'+attr(w.de)+'"><input id="tip'+i+'" placeholder="💡 Eigene Eselsbrücke"></div>').join("")+
- '<div class="actions" style="justify-content:flex-start"><button class="primary" onclick="addPreview()">✅ Hinzufügen</button></div>';
+ save();$("feedback").classList.remove("hidden");$("answerInput").disabled=true;$("checkBtn").classList.add("hidden");$("nextBtn").classList.remove("hidden");renderTips();renderList();updateOverall();
 }
-function addPreview(){
- const out=[];
- previewWords.forEach((w,i)=>{
-   const es=document.getElementById("es"+i).value.trim(),de=document.getElementById("de"+i).value.trim(),tip=document.getElementById("tip"+i).value.trim();
-   if(es&&de)out.push({...w,es,de,tip});
- });
- db.words.push(...out);save();
- document.getElementById("bulk").value="";document.getElementById("preview").classList.add("hidden");
- alert(out.length+" Vokabeln hinzugefügt.");showTab("learn");
+function next(){renderLearn()}
+function updateOverall(){
+ let total=db.words.length, learned=db.words.filter(w=>w.learned).length;
+ $("overall").textContent=`${learned} von ${total} Vokabeln gelernt Â· ${total?Math.round(learned/total*100):0}%`;
+ $("overallBar").style.width=(total?learned/total*100:0)+"%";
 }
-function sample(){document.getElementById("bulk").value="casa – Haus\ncomer – essen\nhablar – sprechen\nbeber – trinken\nescuela – Schule\namigo – Freund\nlibro – Buch\nrápido – schnell";}
-
-function chooseCard(){
- if(!db.words.length)return null;
- let pool=db.words.filter(w=>w.box<5);
- if(!pool.length)pool=db.words;
- pool.sort((a,b)=>a.box-b.box || a.lastSeen-b.lastSeen || b.wrong-a.wrong);
- return pool[0];
-}
-function nextCard(){revealed=false;current=chooseCard();renderQuiz()}
-function renderQuiz(){
- const q=document.getElementById("quiz");
- if(!db.words.length){
-   q.innerHTML='<div class="empty"><div class="bigIcon">📚</div><h2>Noch keine Vokabeln</h2><p>Gehe auf „Importieren“ und füge deine Vokabelliste ein.</p><button class="primary" onclick="showTab(\'import\')">Vokabeln importieren</button></div>';return;
- }
- if(!current)current=chooseCard();
- if(!current)return;
- q.innerHTML='<div class="small">Übersetze ins Spanische</div><div class="word">'+esc(current.de)+'</div>'+
- (revealed?
- '<div class="answer">'+esc(current.es)+'</div>'+
- '<div class="notice"><b>💡 Eselsbrücke</b><br>'+esc(current.tip||"Keine eigene Eselsbrücke gespeichert.")+'</div>'+
- '<div class="actions"><button class="bad" onclick="answer(false)">❌ Falsch</button><button class="good" onclick="answer(true)">✅ Richtig</button></div>'
- :
- '<div class="answer muted">Sag die spanische Antwort laut oder denke sie dir.</div><div class="actions"><button class="primary" onclick="revealed=true;renderQuiz()">Antwort anzeigen</button></div>');
-}
-function answer(ok){
- db.today++;db.totalAnswers++;current.lastSeen=Date.now();
- if(ok){db.totalCorrect++;current.correct++;current.box=Math.min(5,current.box+1)}
- else{current.wrong++;current.box=0}
- save();current=null;nextCard();updateStats();
-}
-function updateStats(){
- document.getElementById("statToday").textContent=db.today;
- document.getElementById("statRate").textContent=(db.totalAnswers?Math.round(db.totalCorrect/db.totalAnswers*100):0)+"%";
- document.getElementById("statOpen").textContent=db.words.filter(w=>w.box<5).length;
+function renderTips(){
+ let s=$("tipWord");s.innerHTML="";
+ db.words.forEach((w,i)=>{let o=document.createElement("option");o.value=i;o.textContent=`${w.es} â ${w.de}`;s.appendChild(o)});
+ if(db.words.length){let w=db.words[Number(s.value)]||db.words[0];$("tipText").value=w.tip||""}
 }
 function renderList(){
- const el=document.getElementById("wordList");
- if(!db.words.length){el.innerHTML='<div class="empty">Noch keine Vokabeln.</div>';return}
- el.innerHTML=db.words.map((w,i)=>'<div class="row">'+
- '<input value="'+attr(w.es)+'" onchange="editWord('+i+',\'es\',this.value)">'+
- '<input value="'+attr(w.de)+'" onchange="editWord('+i+',\'de\',this.value)">'+
- '<input value="'+attr(w.tip)+'" placeholder="💡 Eigene Eselsbrücke" onchange="editWord('+i+',\'tip\',this.value)">'+
- '<button class="bad" onclick="deleteWord('+i+')">×</button></div>').join("");
+ $("wordList").innerHTML=db.words.length?db.words.map(w=>`<div class="word"><b>${esc(w.es)}</b> â ${esc(w.de)}<div><span class="pill">${phaseLabel(w.phase||0)}</span><span class="pill">${w.correct||0}Ã richtig</span><span class="pill">${w.wrong||0}Ã falsch</span>${w.tip?"<span class='pill'>ð¡ Merkhilfe</span>":""}</div></div>`).join(""):"Noch keine Vokabeln.";
 }
-function editWord(i,k,v){db.words[i][k]=v;save();renderAll()}
-function deleteWord(i){if(confirm("Vokabel wirklich löschen?")){db.words.splice(i,1);save();renderAll()}}
-function renderAll(){updateStats();renderQuiz();renderList()}
+function renderLearned(){ $("learnedCount").innerHTML=`<b>${db.words.filter(w=>w.learned).length}</b> gelernte Vokabeln` }
+function renderAll(){renderLearn();renderTips();renderList();renderLearned()}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));$(b.dataset.page).classList.remove("hidden");renderAll()});
+$("checkBtn").onclick=checkAnswer;
+$("answerInput").addEventListener("keydown",e=>{if(e.key==="Enter")checkAnswer()});
+$("nextBtn").onclick=next;
+$("addBtn").onclick=()=>{
+ let arr=parse($("importText").value),added=0;
+ arr.forEach(([es,de])=>{if(!db.words.some(w=>norm(w.es)===norm(es)&&norm(w.de)===norm(de))){db.words.push({es,de,tip:"",phase:0,learned:false,correct:0,wrong:0,nextDue:Date.now()});added++}});
+ save();$("importText").value="";$("importMsg").textContent=`${added} neue Vokabel(n) hinzugefÃ¼gt.`;renderAll()
+};
+$("tipWord").onchange=()=>{let w=db.words[Number($("tipWord").value)];$("tipText").value=w?.tip||""};
+$("saveTip").onclick=()=>{let i=Number($("tipWord").value);if(!db.words[i])return;db.words[i].tip=$("tipText").value.trim();save();$("importMsg").textContent="Merkhilfe gespeichert.";renderAll()};
+$("sample").onclick=()=>{$("importText").value="hola â hallo\ngracias â danke\npor favor â bitte\ncomer â essen\nbeber â trinken\ncasa â Haus"};
+$("reset").onclick=()=>{if(confirm("Wirklich alle Vokabeln und den gesamten Lernstand lÃ¶schen?")){db={words:[],answers:0,correct:0,createdAt:Date.now()};save();renderAll()}};
 
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-syncHash();
+$("exportBtn").onclick=()=>{
+ const data={app:"VocaSprint",version:BACKUP_VERSION,savedAt:new Date().toISOString(),db};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="VocaSprint-Fortschritt.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
+};
+$("importBackupBtn").onclick=()=>$("backupFile").click();
+$("backupFile").onchange=e=>{
+ const f=e.target.files[0];if(!f)return;
+ const r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.db||!Array.isArray(x.db.words))throw Error();db=x.db;save();renderAll();alert("Sicherung erfolgreich geladen.")}catch(err){alert("Diese Datei ist keine gÃ¼ltige VocaSprint-Sicherung.")}};r.readAsText(f);e.target.value=""
+};
+
+function grade(correct,total){
+ if(total===0)return "â";
+ let p=correct/total;
+ if(p>=1)return "1,0";
+ if(p>=.93)return "1,3";
+ if(p>=.87)return "1,7";
+ if(p>=.80)return "2,0";
+ if(p>=.73)return "2,3";
+ if(p>=.67)return "2,7";
+ if(p>=.60)return "3,0";
+ if(p>=.50)return "3,7";
+ if(p>=.47)return "4,0";
+ if(p>=.30)return "5,0";
+ return "6,0";
+}
+function startTest(){
+ let learned=db.words.filter(w=>w.learned);
+ if(!learned.length){alert("Noch keine Vokabeln im Tab âGelerntâ.");return}
+ test={words:shuffle(learned).slice(0,15),index:0,correct:0,answered:false};
+ $("testArea").classList.remove("hidden");$("testResult").classList.add("hidden");renderTest();
+}
+function renderTest(){
+ if(test.index>=test.words.length){finishTest();return}
+ let w=test.words[test.index];test.answered=false;
+ $("testProgress").textContent=`Frage ${test.index+1} von ${test.words.length}`;
+ $("testQuestion").textContent=w.de;
+ $("testAnswer").value="";$("testAnswer").disabled=false;$("testCheck").classList.remove("hidden");$("testNext").classList.add("hidden");$("testFeedback").classList.add("hidden");$("testAnswer").focus()
+}
+function checkTest(){
+ if(test.answered)return;test.answered=true;
+ let w=test.words[test.index],ok=norm($("testAnswer").value)===norm(w.es);
+ if(ok)test.correct++;
+ $("testFeedback").className="feedback "+(ok?"ok":"wrong");
+ $("testFeedback").innerHTML=ok?"â Richtig!":`â Richtig wÃ¤re: <b>${esc(w.es)}</b>`;
+ $("testFeedback").classList.remove("hidden");$("testAnswer").disabled=true;$("testCheck").classList.add("hidden");$("testNext").classList.remove("hidden")
+}
+function nextTest(){test.index++;renderTest()}
+function finishTest(){
+ let total=test.words.length,g=grade(test.correct,total);
+ $("testArea").classList.add("hidden");$("testResult").classList.remove("hidden");
+ $("testResult").innerHTML=`<div class="grade">Note ${g}</div><div class="center"><b>${test.correct} / ${total} richtig</b><br><span class="small">Die 15er-Tests sind zusÃ¤tzliche Kontrolle und verÃ¤ndern den 5-Phasen-Status nicht.</span></div><br><button class="primary" id="againTest">Nochmal testen</button>`;
+ $("againTest").onclick=startTest
+}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+$("startTest").onclick=startTest;$("testCheck").onclick=checkTest;$("testNext").onclick=nextTest;
+$("testAnswer").addEventListener("keydown",e=>{if(e.key==="Enter")checkTest()});
+renderAll();
 </script>
 </body>
-</html>
+ </html>
