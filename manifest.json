@@ -1,8 +1,0 @@
-{
-  "name":"VocaSprint",
-  "short_name":"VocaSprint",
-  "start_url":"./",
-  "display":"standalone",
-  "background_color":"#07110b",
-  "theme_color":"#ff8a00"
-}
